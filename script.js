@@ -1,4 +1,3 @@
-
 const moodSelector = document.getElementById('moodSelector');
 const genreSelector = document.getElementById('genreSelector');
 const decadeSelector = document.getElementById('decadeSelector');
@@ -14,8 +13,11 @@ const registerBtn = document.getElementById('registerBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 const loginModal = document.getElementById('loginModal');
 const registerModal = document.getElementById('registerModal');
+const saveModal = document.getElementById('saveModal');
 const loginSubmit = document.getElementById('loginSubmit');
 const registerSubmit = document.getElementById('registerSubmit');
+const saveSelectedBtn = document.getElementById('saveSelectedBtn');
+const saveAllBtn = document.getElementById('saveAllBtn');
 
 const moodDescriptions = {
     happy: "Upbeat and cheerful songs to boost your mood.",
@@ -170,6 +172,7 @@ function displayPlaylist(playlist) {
         const songElement = document.createElement('div');
         songElement.classList.add('song');
         songElement.innerHTML = `
+            <input type="checkbox" class="song-checkbox" id="song-${index}">
             <span class="song-number">${index + 1}.</span>
             <div class="song-info">
                 <span class="song-title">${song.title} - ${song.artist}</span>
@@ -214,20 +217,57 @@ function updateMoodDescription() {
     }
 }
 
-function savePlaylist() {
+function showSaveModal() {
     if (!isLoggedIn()) {
         alert('Please log in to save your playlist.');
         return;
     }
-    const currentPlaylist = Array.from(playlistDiv.querySelectorAll('.song')).map(songElement => {
+    
+    const playlist = Array.from(playlistDiv.querySelectorAll('.song'));
+    if (playlist.length === 0) {
+        alert('No playlist to save. Generate a playlist first.');
+        return;
+    }
+
+    const savePlaylistContent = document.getElementById('savePlaylistContent');
+    savePlaylistContent.innerHTML = '';
+    playlist.forEach((song, index) => {
+        const songTitle = song.querySelector('.song-title').textContent;
+        savePlaylistContent.innerHTML += `
+            <div>
+                <input type="checkbox" id="save-song-${index}" checked>
+                <label for="save-song-${index}">${songTitle}</label>
+            </div>
+        `;
+    });
+
+    saveModal.style.display = 'block';
+}
+
+function savePlaylist(selectedOnly) {
+    const playlist = Array.from(playlistDiv.querySelectorAll('.song'));
+    const savedPlaylist = playlist.filter((song, index) => {
+        if (selectedOnly) {
+            const checkbox = document.getElementById(`save-song-${index}`);
+            return checkbox && checkbox.checked;
+        }
+        return true;
+    }).map(song => {
         return {
-            title: songElement.querySelector('.song-title').textContent,
-            genre: songElement.querySelector('.song-genre').textContent,
-            year: songElement.querySelector('.song-year').textContent
+            title: song.querySelector('.song-title').textContent,
+            genre: song.querySelector('.song-genre').textContent,
+            year: song.querySelector('.song-year').textContent
         };
     });
-    localStorage.setItem('savedPlaylist', JSON.stringify(currentPlaylist));
+
+    if (savedPlaylist.length === 0) {
+        alert('No songs selected to save.');
+        return;
+    }
+
+    localStorage.setItem('savedPlaylist', JSON.stringify(savedPlaylist));
     alert('Playlist saved!');
+    saveModal.style.display = 'none';
 }
 
 function loadSavedPlaylist() {
