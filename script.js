@@ -31,23 +31,23 @@ const moodDescriptions = {
 };
 
 const playlists = {
-    happy: [
-        { title: "Don't Stop Me Now", artist: "Queen", genre: "Rock", year: 1978 },
-        { title: "Happy", artist: "Pharrell Williams", genre: "Pop", year: 2013 },
-        { title: "Walking on Sunshine", artist: "Katrina and The Waves", genre: "Pop", year: 1983 },
-        { title: "I Gotta Feeling", artist: "The Black Eyed Peas", genre: "Pop", year: 2009 },
-        { title: "Can't Stop the Feeling!", artist: "Justin Timberlake", genre: "Pop", year: 2016 },
-        { title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars", genre: "Pop", year: 2014 },
-        { title: "Good Vibrations", artist: "The Beach Boys", genre: "Rock", year: 1966 }
+  happy: [
+        {title: "Happy", artist: "Pharrell Williams", genre: "Pop", year: 2013},
+        {title: "Don't Stop Me Now", artist: "Queen", genre: "Rock", year: 1979},
+        {title: "Dancing Queen", artist: "ABBA", genre: "Pop", year: 1976},
+        {title: "Macarena", artist: "Los del Río", genre: "Pop", year: 1993},
+        {title: "Jai Ho", artist: "A.R. Rahman", genre: "Hindi", year: 2008},
+        {title: "Whatta Man", artist: "Salt-N-Pepa", genre: "Hip Hop", year: 1993},
+        {title: "Buttabomma", artist: "Armaan Malik", genre: "Telugu", year: 2020},
     ],
-    sad: [
-        { title: "Someone Like You", artist: "Adele", genre: "Pop", year: 2011 },
-        { title: "Fix You", artist: "Coldplay", genre: "Rock", year: 2005 },
-        { title: "Hurt", artist: "Johnny Cash", genre: "Country", year: 2002 },
-        { title: "The Sound of Silence", artist: "Simon & Garfunkel", genre: "Folk", year: 1964 },
-        { title: "Everybody Hurts", artist: "R.E.M.", genre: "Rock", year: 1992 },
-        { title: "Hallelujah", artist: "Jeff Buckley", genre: "Rock", year: 1994 },
-        { title: "Nothing Compares 2 U", artist: "Sinéad O'Connor", genre: "Pop", year: 1990 }
+       sad: [
+        {title: "Someone Like You", artist: "Adele", genre: "Pop", year: 2011},
+        {title: "Hurt", artist: "Johnny Cash", genre: "Rock", year: 2002},
+        {title: "The Sound of Silence", artist: "Simon & Garfunkel", genre: "Folk", year: 1964},
+        {title: "Tears in Heaven", artist: "Eric Clapton", genre: "Rock", year: 1992},
+        {title: "Tadap Tadap", artist: "K.K.", genre: "Hindi", year: 1999},
+        {title: "Emptiness", artist: "Tune Mere Jaana", genre: "Hindi", year: 2010},
+        {title: "Varsham Munduga", artist: "Shankar Mahadevan", genre: "Telugu", year: 2004},
     ],
     energetic: [
         { title: "Eye of the Tiger", artist: "Survivor", genre: "Rock", year: 1982 },
@@ -104,11 +104,10 @@ const playlists = {
         { title: "Bohemian Rhapsody", artist: "Queen", genre: "Rock", year: 1975 }
     ]
 };
-
 generateBtn.addEventListener('click', generatePlaylist);
 luckyBtn.addEventListener('click', generateRandomPlaylist);
 clearBtn.addEventListener('click', clearSelections);
-saveBtn.addEventListener('click', savePlaylist);
+saveBtn.addEventListener('click', showSaveModal);
 loadBtn.addEventListener('click', loadSavedPlaylist);
 moodSelector.addEventListener('change', updateMoodDescription);
 genreSelector.addEventListener('change', () => {
@@ -122,13 +121,16 @@ registerBtn.addEventListener('click', () => showModal(registerModal));
 logoutBtn.addEventListener('click', logout);
 loginSubmit.addEventListener('click', login);
 registerSubmit.addEventListener('click', register);
+saveSelectedBtn.addEventListener('click', () => savePlaylist(true));
+saveAllBtn.addEventListener('click', () => savePlaylist(false));
 document.querySelectorAll('.close-modal').forEach(btn => {
     btn.addEventListener('click', () => {
         loginModal.style.display = 'none';
         registerModal.style.display = 'none';
+        saveModal.style.display = 'none';
     });
 });
-// Playlist generation and display functions
+
 function generatePlaylist() {
     const selectedMood = moodSelector.value;
     const selectedGenre = genreSelector.value;
@@ -172,7 +174,7 @@ function displayPlaylist(playlist) {
         const songElement = document.createElement('div');
         songElement.classList.add('song');
         songElement.innerHTML = `
-            <input type="checkbox" class="song-checkbox" id="song-${index}">
+            <input type="checkbox" class="song-checkbox" id="song-${index}" checked>
             <span class="song-number">${index + 1}.</span>
             <div class="song-info">
                 <span class="song-title">${song.title} - ${song.artist}</span>
@@ -283,7 +285,6 @@ function loadSavedPlaylist() {
     }
 }
 
-// Animation function
 function animateElement(element, delay = 0) {
     anime({
         targets: element,
@@ -295,7 +296,6 @@ function animateElement(element, delay = 0) {
     });
 }
 
-// Authentication functions
 function showModal(modal) {
     modal.style.display = 'block';
 }
@@ -303,7 +303,6 @@ function showModal(modal) {
 function login() {
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
-    // Implement actual login logic here
     if (username && password) {
         localStorage.setItem('user', JSON.stringify({ username }));
         updateAuthUI(true);
@@ -316,7 +315,6 @@ function login() {
 function register() {
     const username = document.getElementById('registerUsername').value;
     const password = document.getElementById('registerPassword').value;
-    // Implement actual registration logic here
     if (username && password) {
         localStorage.setItem('user', JSON.stringify({ username }));
         updateAuthUI(true);
@@ -349,5 +347,45 @@ function updateAuthUI(loggedIn) {
     }
 }
 
-// Initialize auth UI
 updateAuthUI(isLoggedIn());
+
+function initializeAnimations() {
+    anime({
+        targets: '.animated-title',
+        opacity: [0, 1],
+        translateY: [-50, 0],
+        easing: 'easeOutExpo',
+        duration: 1000,
+        delay: 300
+    });
+
+    
+    anime({
+        targets: '.subtitle',
+        opacity: [0, 1],
+        translateY: [-20, 0],
+        easing: 'easeOutExpo',
+        duration: 800,
+        delay: 500
+    });
+
+    anime({
+        targets: '.button-group button',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeOutExpo',
+        duration: 600,
+        delay: anime.stagger(100, {start: 700})
+    });
+
+    anime({
+        targets: 'select',
+        opacity: [0, 1],
+        translateX: [-20, 0],
+        easing: 'easeOutExpo',
+        duration: 600,
+        delay: anime.stagger(100, {start: 900})
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initializeAnimations);

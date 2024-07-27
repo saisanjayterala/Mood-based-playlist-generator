@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mood Maestro v5</title>
+    <title>Mood Maestro v6</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -11,12 +11,12 @@
 <body>
     <div class="container">
         <header>
-            <h1>Mood Maestro</h1>
-            <p>Your Personal Playlist Generator</p>
+            <h1 class="animated-title">Mood Maestro</h1>
+            <p class="subtitle">Your Personal Playlist Generator</p>
             <div class="auth-buttons">
-                <button id="loginBtn">Login</button>
-                <button id="registerBtn">Register</button>
-                <button id="logoutBtn" style="display: none;">Logout</button>
+                <button id="loginBtn" class="auth-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button id="registerBtn" class="auth-btn"><i class="fas fa-user-plus"></i> Register</button>
+                <button id="logoutBtn" class="auth-btn" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </header>
         <main>
@@ -24,14 +24,14 @@
                 <label for="moodSelector">How are you feeling today?</label>
                 <select id="moodSelector">
                     <option value="">Choose a mood</option>
-                    <option value="happy">Happy</option>
-                    <option value="sad">Sad</option>
-                    <option value="energetic">Energetic</option>
-                    <option value="relaxed">Relaxed</option>
-                    <option value="romantic">Romantic</option>
-                    <option value="focused">Focused</option>
-                    <option value="angry">Angry</option>
-                    <option value="nostalgic">Nostalgic</option>
+                    <option value="happy">😊 Happy</option>
+                    <option value="sad">😢 Sad</option>
+                    <option value="energetic">⚡ Energetic</option>
+                    <option value="relaxed">😌 Relaxed</option>
+                    <option value="romantic">❤️ Romantic</option>
+                    <option value="focused">🧠 Focused</option>
+                    <option value="angry">😠 Angry</option>
+                    <option value="nostalgic">🕰️ Nostalgic</option>
                 </select>
             </div>
             <div class="additional-options">
@@ -63,15 +63,15 @@
                 </div>
             </div>
             <div class="button-group">
-                <button id="generateBtn" class="primary-btn">Generate Playlist</button>
-                <button id="luckyBtn" class="secondary-btn">I'm Feeling Lucky</button>
-                <button id="clearBtn" class="secondary-btn">Clear Selections</button>
+                <button id="generateBtn" class="primary-btn"><i class="fas fa-play"></i> Generate Playlist</button>
+                <button id="luckyBtn" class="secondary-btn"><i class="fas fa-dice"></i> I'm Feeling Lucky</button>
+                <button id="clearBtn" class="secondary-btn"><i class="fas fa-trash"></i> Clear Selections</button>
             </div>
             <div id="moodDescription" class="mood-description"></div>
             <div id="playlist" class="playlist"></div>
             <div class="button-group">
-                <button id="saveBtn" class="secondary-btn">Save Playlist</button>
-                <button id="loadBtn" class="secondary-btn">Load Saved Playlist</button>
+                <button id="saveBtn" class="secondary-btn"><i class="fas fa-save"></i> Save Playlist</button>
+                <button id="loadBtn" class="secondary-btn"><i class="fas fa-folder-open"></i> Load Saved Playlist</button>
             </div>
         </main>
     </div>
@@ -81,8 +81,8 @@
             <h2>Login</h2>
             <input type="text" id="loginUsername" placeholder="Username">
             <input type="password" id="loginPassword" placeholder="Password">
-            <button id="loginSubmit">Login</button>
-            <button class="close-modal">Close</button>
+            <button id="loginSubmit" class="primary-btn">Login</button>
+            <button class="close-modal secondary-btn">Close</button>
         </div>
     </div>
 
@@ -91,8 +91,8 @@
             <h2>Register</h2>
             <input type="text" id="registerUsername" placeholder="Username">
             <input type="password" id="registerPassword" placeholder="Password">
-            <button id="registerSubmit">Register</button>
-            <button class="close-modal">Close</button>
+            <button id="registerSubmit" class="primary-btn">Register</button>
+            <button class="close-modal secondary-btn">Close</button>
         </div>
     </div>
 
@@ -101,9 +101,11 @@
             <h2>Save Playlist</h2>
             <p>Select songs to save:</p>
             <div id="savePlaylistContent"></div>
-            <button id="saveSelectedBtn">Save Selected</button>
-            <button id="saveAllBtn">Save All</button>
-            <button class="close-modal">Close</button>
+            <div class="button-group">
+                <button id="saveSelectedBtn" class="primary-btn"><i class="fas fa-check-square"></i> Save Selected</button>
+                <button id="saveAllBtn" class="secondary-btn"><i class="fas fa-save"></i> Save All</button>
+                <button class="close-modal secondary-btn"><i class="fas fa-times"></i> Close</button>
+            </div>
         </div>
     </div>
 
