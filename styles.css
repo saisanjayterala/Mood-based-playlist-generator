@@ -237,7 +237,10 @@ button:active {
     margin: 15% auto;
     padding: 20px;
     border-radius: 5px;
-    width: 300px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     animation: modalFadeIn 0.3s ease-out;
 }
@@ -272,6 +275,47 @@ button:active {
     color: white;
 }
 
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--background-color);
+}
+
+.login-container {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.login-container button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.login-container a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 1rem;
@@ -287,5 +331,10 @@ button:active {
 
     button {
         width: 100%;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
     }
 }

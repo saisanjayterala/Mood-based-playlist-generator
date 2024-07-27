@@ -1,3 +1,4 @@
+// taken help from youtube 
 const moodSelector = document.getElementById('moodSelector');
 const genreSelector = document.getElementById('genreSelector');
 const decadeSelector = document.getElementById('decadeSelector');
@@ -8,16 +9,17 @@ const saveBtn = document.getElementById('saveBtn');
 const loadBtn = document.getElementById('loadBtn');
 const playlistDiv = document.getElementById('playlist');
 const moodDescriptionDiv = document.getElementById('moodDescription');
-const loginBtn = document.getElementById('loginBtn');
-const registerBtn = document.getElementById('registerBtn');
 const logoutBtn = document.getElementById('logoutBtn');
-const loginModal = document.getElementById('loginModal');
-const registerModal = document.getElementById('registerModal');
 const saveModal = document.getElementById('saveModal');
-const loginSubmit = document.getElementById('loginSubmit');
-const registerSubmit = document.getElementById('registerSubmit');
 const saveSelectedBtn = document.getElementById('saveSelectedBtn');
 const saveAllBtn = document.getElementById('saveAllBtn');
+const loginPage = document.getElementById('loginPage');
+const registerPage = document.getElementById('registerPage');
+const mainApp = document.getElementById('mainApp');
+const loginSubmit = document.getElementById('loginSubmit');
+const registerSubmit = document.getElementById('registerSubmit');
+const showRegister = document.getElementById('showRegister');
+const showLogin = document.getElementById('showLogin');
 
 const moodDescriptions = {
     happy: "Upbeat and cheerful songs to boost your mood.",
@@ -29,6 +31,7 @@ const moodDescriptions = {
     angry: "Intense songs to channel your frustration.",
     nostalgic: "Classic hits to take you back in time."
 };
+
 
 const playlists = {
   happy: [
@@ -103,33 +106,63 @@ const playlists = {
         { title: "I Want to Hold Your Hand", artist: "The Beatles", genre: "Rock", year: 1963 },
         { title: "Bohemian Rhapsody", artist: "Queen", genre: "Rock", year: 1975 }
     ]
-};
-generateBtn.addEventListener('click', generatePlaylist);
-luckyBtn.addEventListener('click', generateRandomPlaylist);
-clearBtn.addEventListener('click', clearSelections);
-saveBtn.addEventListener('click', showSaveModal);
-loadBtn.addEventListener('click', loadSavedPlaylist);
-moodSelector.addEventListener('change', updateMoodDescription);
-genreSelector.addEventListener('change', () => {
-    if (moodSelector.value) generatePlaylist();
-});
-decadeSelector.addEventListener('change', () => {
-    if (moodSelector.value) generatePlaylist();
-});
-loginBtn.addEventListener('click', () => showModal(loginModal));
-registerBtn.addEventListener('click', () => showModal(registerModal));
-logoutBtn.addEventListener('click', logout);
-loginSubmit.addEventListener('click', login);
-registerSubmit.addEventListener('click', register);
-saveSelectedBtn.addEventListener('click', () => savePlaylist(true));
-saveAllBtn.addEventListener('click', () => savePlaylist(false));
-document.querySelectorAll('.close-modal').forEach(btn => {
-    btn.addEventListener('click', () => {
-        loginModal.style.display = 'none';
-        registerModal.style.display = 'none';
-        saveModal.style.display = 'none';
-    });
-});
+};function init() {
+    if (isLoggedIn()) {
+        showMainApp();
+    } else {
+        showLoginPage();
+    }
+}
+
+function showLoginPage() {
+    loginPage.style.display = 'flex';
+    registerPage.style.display = 'none';
+    mainApp.style.display = 'none';
+}
+
+function showRegisterPage() {
+    loginPage.style.display = 'none';
+    registerPage.style.display = 'flex';
+    mainApp.style.display = 'none';
+}
+
+function showMainApp() {
+    loginPage.style.display = 'none';
+    registerPage.style.display = 'none';
+    mainApp.style.display = 'block';
+    initializeAnimations();
+}
+
+function login() {
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    if (username && password) {
+        localStorage.setItem('user', JSON.stringify({ username }));
+        showMainApp();
+    } else {
+        alert('Please enter both username and password.');
+    }
+}
+
+function register() {
+    const username = document.getElementById('registerUsername').value;
+    const password = document.getElementById('registerPassword').value;
+    if (username && password) {
+        localStorage.setItem('user', JSON.stringify({ username }));
+        showMainApp();
+    } else {
+        alert('Please enter both username and password.');
+    }
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    showLoginPage();
+}
+
+function isLoggedIn() {
+    return !!localStorage.getItem('user');
+}
 
 function generatePlaylist() {
     const selectedMood = moodSelector.value;
@@ -220,11 +253,6 @@ function updateMoodDescription() {
 }
 
 function showSaveModal() {
-    if (!isLoggedIn()) {
-        alert('Please log in to save your playlist.');
-        return;
-    }
-    
     const playlist = Array.from(playlistDiv.querySelectorAll('.song'));
     if (playlist.length === 0) {
         alert('No playlist to save. Generate a playlist first.');
@@ -273,10 +301,6 @@ function savePlaylist(selectedOnly) {
 }
 
 function loadSavedPlaylist() {
-    if (!isLoggedIn()) {
-        alert('Please log in to load your saved playlist.');
-        return;
-    }
     const savedPlaylist = localStorage.getItem('savedPlaylist');
     if (savedPlaylist) {
         displayPlaylist(JSON.parse(savedPlaylist));
@@ -296,59 +320,6 @@ function animateElement(element, delay = 0) {
     });
 }
 
-function showModal(modal) {
-    modal.style.display = 'block';
-}
-
-function login() {
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
-    if (username && password) {
-        localStorage.setItem('user', JSON.stringify({ username }));
-        updateAuthUI(true);
-        loginModal.style.display = 'none';
-    } else {
-        alert('Please enter both username and password.');
-    }
-}
-
-function register() {
-    const username = document.getElementById('registerUsername').value;
-    const password = document.getElementById('registerPassword').value;
-    if (username && password) {
-        localStorage.setItem('user', JSON.stringify({ username }));
-        updateAuthUI(true);
-        registerModal.style.display = 'none';
-    } else {
-        alert('Please enter both username and password.');
-    }
-}
-
-function logout() {
-    localStorage.removeItem('user');
-    updateAuthUI(false);
-}
-
-function isLoggedIn() {
-    return !!localStorage.getItem('user');
-}
-
-function updateAuthUI(loggedIn) {
-    if (loggedIn) {
-        loginBtn.style.display = 'none';
-        registerBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-        const user = JSON.parse(localStorage.getItem('user'));
-        logoutBtn.textContent = `Logout (${user.username})`;
-    } else {
-        loginBtn.style.display = 'inline-block';
-        registerBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-    }
-}
-
-updateAuthUI(isLoggedIn());
-
 function initializeAnimations() {
     anime({
         targets: '.animated-title',
@@ -359,7 +330,6 @@ function initializeAnimations() {
         delay: 300
     });
 
-    
     anime({
         targets: '.subtitle',
         opacity: [0, 1],
@@ -388,4 +358,30 @@ function initializeAnimations() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', initializeAnimations);
+generateBtn.addEventListener('click', generatePlaylist);
+luckyBtn.addEventListener('click', generateRandomPlaylist);
+clearBtn.addEventListener('click', clearSelections);
+saveBtn.addEventListener('click', showSaveModal);
+loadBtn.addEventListener('click', loadSavedPlaylist);
+moodSelector.addEventListener('change', updateMoodDescription);
+genreSelector.addEventListener('change', () => {
+    if (moodSelector.value) generatePlaylist();
+});
+decadeSelector.addEventListener('change', () => {
+    if (moodSelector.value) generatePlaylist();
+});
+logoutBtn.addEventListener('click', logout);
+loginSubmit.addEventListener('click', login);
+registerSubmit.addEventListener('click', register);
+saveSelectedBtn.addEventListener('click', () => savePlaylist(true));
+saveAllBtn.addEventListener('click', () => savePlaylist(false));
+showRegister.addEventListener('click', showRegisterPage);
+showLogin.addEventListener('click', showLoginPage);
+
+document.querySelectorAll('.close-modal').forEach(btn => {
+    btn.addEventListener('click', () => {
+        saveModal.style.display = 'none';
+    });
+});
+
+init();
