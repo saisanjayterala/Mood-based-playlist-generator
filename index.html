@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mood-based Playlist Generator v3</title>
+    <title>Mood-based Playlist Generator v2</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
@@ -20,6 +20,30 @@
                 <option value="relaxed">Relaxed</option>
                 <option value="romantic">Romantic</option>
                 <option value="focused">Focused</option>
+                <option value="angry">Angry</option>
+                <option value="nostalgic">Nostalgic</option>
+            </select>
+        </div>
+        <div class="additional-options">
+            <label for="genreSelector">Preferred Genre:</label>
+            <select id="genreSelector">
+                <option value="">Any Genre</option>
+                <option value="pop">Pop</option>
+                <option value="rock">Rock</option>
+                <option value="hiphop">Hip Hop</option>
+                <option value="electronic">Electronic</option>
+                <option value="classical">Classical</option>
+            </select>
+            <label for="decadeSelector">Preferred Decade:</label>
+            <select id="decadeSelector">
+                <option value="">Any Decade</option>
+                <option value="60s">1960s</option>
+                <option value="70s">1970s</option>
+                <option value="80s">1980s</option>
+                <option value="90s">1990s</option>
+                <option value="00s">2000s</option>
+                <option value="10s">2010s</option>
+                <option value="20s">2020s</option>
             </select>
         </div>
         <button id="generateBtn">Generate Playlist</button>
