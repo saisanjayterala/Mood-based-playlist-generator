@@ -1,3 +1,4 @@
+
 const moodSelector = document.getElementById('moodSelector');
 const genreSelector = document.getElementById('genreSelector');
 const decadeSelector = document.getElementById('decadeSelector');
@@ -8,16 +9,23 @@ const saveBtn = document.getElementById('saveBtn');
 const loadBtn = document.getElementById('loadBtn');
 const playlistDiv = document.getElementById('playlist');
 const moodDescriptionDiv = document.getElementById('moodDescription');
+const loginBtn = document.getElementById('loginBtn');
+const registerBtn = document.getElementById('registerBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+const loginModal = document.getElementById('loginModal');
+const registerModal = document.getElementById('registerModal');
+const loginSubmit = document.getElementById('loginSubmit');
+const registerSubmit = document.getElementById('registerSubmit');
 
 const moodDescriptions = {
-    happy: "Upbeat and cheerful songs to boost your mood and bring a smile to your face.",
-    sad: "Melancholic and emotional tracks to help you process your feelings and find solace.",
-    energetic: "High-energy songs to get you pumped up and ready to take on any challenge.",
-    relaxed: "Calm and soothing melodies to help you unwind and de-stress.",
-    romantic: "Love songs and ballads to set the mood for a romantic evening.",
-    focused: "Instrumental and ambient tracks to improve concentration and productivity.",
-    angry: "Intense and powerful songs to channel your frustration and anger.",
-    nostalgic: "Classic hits and throwbacks to take you on a trip down memory lane."
+    happy: "Upbeat and cheerful songs to boost your mood.",
+    sad: "Melancholic tunes to help you process your emotions.",
+    energetic: "High-tempo tracks to get you pumped up.",
+    relaxed: "Calming melodies to help you unwind.",
+    romantic: "Love songs and ballads for those special moments.",
+    focused: "Instrumental tracks to improve concentration.",
+    angry: "Intense songs to channel your frustration.",
+    nostalgic: "Classic hits to take you back in time."
 };
 
 const playlists = {
@@ -107,7 +115,17 @@ genreSelector.addEventListener('change', () => {
 decadeSelector.addEventListener('change', () => {
     if (moodSelector.value) generatePlaylist();
 });
-
+loginBtn.addEventListener('click', () => showModal(loginModal));
+registerBtn.addEventListener('click', () => showModal(registerModal));
+logoutBtn.addEventListener('click', logout);
+loginSubmit.addEventListener('click', login);
+registerSubmit.addEventListener('click', register);
+document.querySelectorAll('.close-modal').forEach(btn => {
+    btn.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        registerModal.style.display = 'none';
+    });
+});
 // Playlist generation and display functions
 function generatePlaylist() {
     const selectedMood = moodSelector.value;
@@ -139,6 +157,7 @@ function getDecade(year) {
 
 function displayMoodDescription(mood) {
     moodDescriptionDiv.textContent = moodDescriptions[mood];
+    animateElement(moodDescriptionDiv);
 }
 
 function displayPlaylist(playlist) {
@@ -162,6 +181,7 @@ function displayPlaylist(playlist) {
             <i class="fas fa-music song-icon"></i>
         `;
         playlistDiv.appendChild(songElement);
+        animateElement(songElement, index * 100);
     });
 }
 
@@ -195,6 +215,10 @@ function updateMoodDescription() {
 }
 
 function savePlaylist() {
+    if (!isLoggedIn()) {
+        alert('Please log in to save your playlist.');
+        return;
+    }
     const currentPlaylist = Array.from(playlistDiv.querySelectorAll('.song')).map(songElement => {
         return {
             title: songElement.querySelector('.song-title').textContent,
@@ -207,6 +231,10 @@ function savePlaylist() {
 }
 
 function loadSavedPlaylist() {
+    if (!isLoggedIn()) {
+        alert('Please log in to load your saved playlist.');
+        return;
+    }
     const savedPlaylist = localStorage.getItem('savedPlaylist');
     if (savedPlaylist) {
         displayPlaylist(JSON.parse(savedPlaylist));
@@ -214,3 +242,72 @@ function loadSavedPlaylist() {
         alert('No saved playlist found.');
     }
 }
+
+// Animation function
+function animateElement(element, delay = 0) {
+    anime({
+        targets: element,
+        opacity: [0, 1],
+        translateY: [20, 0],
+        easing: 'easeOutExpo',
+        duration: 500,
+        delay: delay
+    });
+}
+
+// Authentication functions
+function showModal(modal) {
+    modal.style.display = 'block';
+}
+
+function login() {
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    // Implement actual login logic here
+    if (username && password) {
+        localStorage.setItem('user', JSON.stringify({ username }));
+        updateAuthUI(true);
+        loginModal.style.display = 'none';
+    } else {
+        alert('Please enter both username and password.');
+    }
+}
+
+function register() {
+    const username = document.getElementById('registerUsername').value;
+    const password = document.getElementById('registerPassword').value;
+    // Implement actual registration logic here
+    if (username && password) {
+        localStorage.setItem('user', JSON.stringify({ username }));
+        updateAuthUI(true);
+        registerModal.style.display = 'none';
+    } else {
+        alert('Please enter both username and password.');
+    }
+}
+
+function logout() {
+    localStorage.removeItem('user');
+    updateAuthUI(false);
+}
+
+function isLoggedIn() {
+    return !!localStorage.getItem('user');
+}
+
+function updateAuthUI(loggedIn) {
+    if (loggedIn) {
+        loginBtn.style.display = 'none';
+        registerBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        const user = JSON.parse(localStorage.getItem('user'));
+        logoutBtn.textContent = `Logout (${user.username})`;
+    } else {
+        loginBtn.style.display = 'inline-block';
+        registerBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+    }
+}
+
+// Initialize auth UI
+updateAuthUI(isLoggedIn());
