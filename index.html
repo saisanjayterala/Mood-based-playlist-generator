@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mood-based Playlist Generator</title>
+    <title>Mood-based Playlist Generator v3</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <h1>Mood-based Playlist Generator</h1>
-        <select id="moodSelector">
-            <option value="">Select your mood</option>
-            <option value="happy">Happy</option>
-            <option value="sad">Sad</option>
-            <option value="energetic">Energetic</option>
-            <option value="relaxed">Relaxed</option>
-        </select>
+        <div class="mood-selector">
+            <label for="moodSelector">Select your mood:</label>
+            <select id="moodSelector">
+                <option value="">Choose a mood</option>
+                <option value="happy">Happy</option>
+                <option value="sad">Sad</option>
+                <option value="energetic">Energetic</option>
+                <option value="relaxed">Relaxed</option>
+                <option value="romantic">Romantic</option>
+                <option value="focused">Focused</option>
+            </select>
+        </div>
         <button id="generateBtn">Generate Playlist</button>
+        <div id="moodDescription"></div>
         <div id="playlist"></div>
     </div>
     <script src="script.js"></script>
