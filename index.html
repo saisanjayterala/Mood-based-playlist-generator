@@ -3,52 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mood-based Playlist Generator v2</title>
+    <title>Mood-based Playlist Generator v3</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Mood-based Playlist Generator</h1>
-        <div class="mood-selector">
-            <label for="moodSelector">Select your mood:</label>
-            <select id="moodSelector">
-                <option value="">Choose a mood</option>
-                <option value="happy">Happy</option>
-                <option value="sad">Sad</option>
-                <option value="energetic">Energetic</option>
-                <option value="relaxed">Relaxed</option>
-                <option value="romantic">Romantic</option>
-                <option value="focused">Focused</option>
-                <option value="angry">Angry</option>
-                <option value="nostalgic">Nostalgic</option>
-            </select>
-        </div>
-        <div class="additional-options">
-            <label for="genreSelector">Preferred Genre:</label>
-            <select id="genreSelector">
-                <option value="">Any Genre</option>
-                <option value="pop">Pop</option>
-                <option value="rock">Rock</option>
-                <option value="hiphop">Hip Hop</option>
-                <option value="electronic">Electronic</option>
-                <option value="classical">Classical</option>
-            </select>
-            <label for="decadeSelector">Preferred Decade:</label>
-            <select id="decadeSelector">
-                <option value="">Any Decade</option>
-                <option value="60s">1960s</option>
-                <option value="70s">1970s</option>
-                <option value="80s">1980s</option>
-                <option value="90s">1990s</option>
-                <option value="00s">2000s</option>
-                <option value="10s">2010s</option>
-                <option value="20s">2020s</option>
-            </select>
-        </div>
-        <button id="generateBtn">Generate Playlist</button>
-        <div id="moodDescription"></div>
-        <div id="playlist"></div>
+        <header>
+            <h1>Mood Maestro</h1>
+            <p>Your Personal Playlist Generator</p>
+        </header>
+        <main>
+            <div class="mood-selector">
+                <label for="moodSelector">How are you feeling today?</label>
+                <select id="moodSelector">
+                    <option value="">Choose a mood</option>
+                    <option value="happy">Happy</option>
+                    <option value="sad">Sad</option>
+                    <option value="energetic">Energetic</option>
+                    <option value="relaxed">Relaxed</option>
+                    <option value="romantic">Romantic</option>
+                    <option value="focused">Focused</option>
+                    <option value="angry">Angry</option>
+                    <option value="nostalgic">Nostalgic</option>
+                </select>
+            </div>
+            <div class="additional-options">
+                <div class="option">
+                    <label for="genreSelector">Preferred Genre:</label>
+                    <select id="genreSelector">
+                        <option value="">Any Genre</option>
+                        <option value="pop">Pop</option>
+                        <option value="rock">Rock</option>
+                        <option value="hiphop">Hip Hop</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="classical">Classical</option>
+                    </select>
+                </div>
+                <div class="option">
+                    <label for="decadeSelector">Preferred Decade:</label>
+                    <select id="decadeSelector">
+                        <option value="">Any Decade</option>
+                        <option value="60s">1960s</option>
+                        <option value="70s">1970s</option>
+                        <option value="80s">1980s</option>
+                        <option value="90s">1990s</option>
+                        <option value="00s">2000s</option>
+                        <option value="10s">2010s</option>
+                        <option value="20s">2020s</option>
+                    </select>
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="generateBtn" class="primary-btn">Generate Playlist</button>
+                <button id="luckyBtn" class="secondary-btn">I'm Feeling Lucky</button>
+                <button id="clearBtn" class="secondary-btn">Clear Selections</button>
+            </div>
+            <div id="moodDescription" class="mood-description"></div>
+            <div id="playlist" class="playlist"></div>
+            <div class="button-group">
+                <button id="saveBtn" class="secondary-btn">Save Playlist</button>
+                <button id="loadBtn" class="secondary-btn">Load Saved Playlist</button>
+            </div>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>

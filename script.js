@@ -2,6 +2,10 @@ const moodSelector = document.getElementById('moodSelector');
 const genreSelector = document.getElementById('genreSelector');
 const decadeSelector = document.getElementById('decadeSelector');
 const generateBtn = document.getElementById('generateBtn');
+const luckyBtn = document.getElementById('luckyBtn');
+const clearBtn = document.getElementById('clearBtn');
+const saveBtn = document.getElementById('saveBtn');
+const loadBtn = document.getElementById('loadBtn');
 const playlistDiv = document.getElementById('playlist');
 const moodDescriptionDiv = document.getElementById('moodDescription');
 
@@ -91,7 +95,21 @@ const playlists = {
     ]
 };
 
-generateBtn.addEventListener('click', () => {
+generateBtn.addEventListener('click', generatePlaylist);
+luckyBtn.addEventListener('click', generateRandomPlaylist);
+clearBtn.addEventListener('click', clearSelections);
+saveBtn.addEventListener('click', savePlaylist);
+loadBtn.addEventListener('click', loadSavedPlaylist);
+moodSelector.addEventListener('change', updateMoodDescription);
+genreSelector.addEventListener('change', () => {
+    if (moodSelector.value) generatePlaylist();
+});
+decadeSelector.addEventListener('change', () => {
+    if (moodSelector.value) generatePlaylist();
+});
+
+// Playlist generation and display functions
+function generatePlaylist() {
     const selectedMood = moodSelector.value;
     const selectedGenre = genreSelector.value;
     const selectedDecade = decadeSelector.value;
@@ -104,7 +122,7 @@ generateBtn.addEventListener('click', () => {
         moodDescriptionDiv.innerHTML = '';
         playlistDiv.innerHTML = '<p>Please select a mood.</p>';
     }
-});
+}
 
 function filterPlaylist(playlist, genre, decade) {
     return playlist.filter(song => {
@@ -147,15 +165,25 @@ function displayPlaylist(playlist) {
     });
 }
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
+function generateRandomPlaylist() {
+    const randomMood = getRandomMood();
+    moodSelector.value = randomMood;
+    updateMoodDescription();
+    generatePlaylist();
 }
 
-moodSelector.addEventListener('change', updateMoodDescription);
+function getRandomMood() {
+    const moods = Object.keys(playlists);
+    return moods[Math.floor(Math.random() * moods.length)];
+}
+
+function clearSelections() {
+    moodSelector.value = '';
+    genreSelector.value = '';
+    decadeSelector.value = '';
+    moodDescriptionDiv.textContent = '';
+    playlistDiv.innerHTML = '';
+}
 
 function updateMoodDescription() {
     const selectedMood = moodSelector.value;
@@ -166,59 +194,7 @@ function updateMoodDescription() {
     }
 }
 
-genreSelector.addEventListener('change', () => {
-    if (moodSelector.value) {
-        generateBtn.click();
-    }
-});
-
-decadeSelector.addEventListener('change', () => {
-    if (moodSelector.value) {
-        generateBtn.click();
-    }
-});
-
-function getRandomMood() {
-    const moods = Object.keys(playlists);
-    return moods[Math.floor(Math.random() * moods.length)];
-}
-
-const luckyBtn = document.createElement('button');
-luckyBtn.id = 'luckyBtn';
-luckyBtn.textContent = "I'm Feeling Lucky";
-luckyBtn.addEventListener('click', () => {
-    const randomMood = getRandomMood();
-    moodSelector.value = randomMood;
-    updateMoodDescription();
-    generateBtn.click();
-});
-document.querySelector('.mood-selector').appendChild(luckyBtn);
-
-const clearBtn = document.createElement('button');
-clearBtn.id = 'clearBtn';
-clearBtn.textContent = "Clear Selections";
-clearBtn.addEventListener('click', () => {
-    moodSelector.value = '';
-    genreSelector.value = '';
-    decadeSelector.value = '';
-    moodDescriptionDiv.textContent = '';
-    playlistDiv.innerHTML = '';
-});
-document.querySelector('.additional-options').appendChild(clearBtn);
-
-function savePlaylist(playlist) {
-    localStorage.setItem('savedPlaylist', JSON.stringify(playlist));
-}
-
-function loadSavedPlaylist() {
-    const savedPlaylist = localStorage.getItem('savedPlaylist');
-    return savedPlaylist ? JSON.parse(savedPlaylist) : null;
-}
-
-const saveBtn = document.createElement('button');
-saveBtn.id = 'saveBtn';
-saveBtn.textContent = "Save Playlist";
-saveBtn.addEventListener('click', () => {
+function savePlaylist() {
     const currentPlaylist = Array.from(playlistDiv.querySelectorAll('.song')).map(songElement => {
         return {
             title: songElement.querySelector('.song-title').textContent,
@@ -226,21 +202,15 @@ saveBtn.addEventListener('click', () => {
             year: songElement.querySelector('.song-year').textContent
         };
     });
-    savePlaylist(currentPlaylist);
+    localStorage.setItem('savedPlaylist', JSON.stringify(currentPlaylist));
     alert('Playlist saved!');
-});
+}
 
-const loadBtn = document.createElement('button');
-loadBtn.id = 'loadBtn';
-loadBtn.textContent = "Load Saved Playlist";
-loadBtn.addEventListener('click', () => {
-    const savedPlaylist = loadSavedPlaylist();
+function loadSavedPlaylist() {
+    const savedPlaylist = localStorage.getItem('savedPlaylist');
     if (savedPlaylist) {
-        displayPlaylist(savedPlaylist);
+        displayPlaylist(JSON.parse(savedPlaylist));
     } else {
         alert('No saved playlist found.');
     }
-});
-
-document.querySelector('.container').appendChild(saveBtn);
-document.querySelector('.container').appendChild(loadBtn);
+}
